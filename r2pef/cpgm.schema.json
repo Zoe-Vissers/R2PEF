@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/rdf2cpgm/cpgm.schema.json",
+  "title": "Canonical Property Graph Model (CPGM)",
+  "description": "Algorithm-neutral JSON representation of an RDF-derived PG, produced by one of four adapter algorithms. All provenance is captured via ResourceHandle objects embedded in each element. The adapter performs all prefix resolution; the framework reads resolved fields directly.",
+  "type": "object",
+  "required": ["algorithm", "prefixes", "nodes", "relations"],
+  "additionalProperties": false,
+  "properties": {
+    "algorithm": {
+      "type": "string",
+      "enum": ["kg2pg", "rdf2pg_sdm", "rdf2pg_gdm", "rdf2pg_cdm"],
+      "description": "The translation algorithm that produced this CPGM. Stored once at the top level."
+    },
+    "prefixes": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/PrefixMapping" },
+      "description": "All prefix-namespace bindings from the translation output. Informational: the framework consumes ResourceHandle.resolved directly (the adapter is responsible for resolving prefixes against this table when populating resolved). Kept in the CPGM so downstream readers can understand the namespace shortcuts the adapter used."
+    },
+    "nodes":     { "type": "array", "items": { "$ref": "#/$defs/Node" } },
+    "relations": { "type": "array", "items": { "$ref": "#/$defs/Relation" } }
+  },
+  "$defs": {
+    "ExpressionForm": {
+      "type": "string",
+      "enum": ["full_iri", "namespace_plus_local", "local_only", "literal"],
+      "description": "How the source-side counterpart was expressed in the translation's native output. full_iri: complete IRI written out. namespace_plus_local: prefix shortform used (e.g. ns1:Movie or ns1_Movie). local_only: only the bare local name was kept (e.g. Movie). literal: the element carries a literal value, not an IRI. Only meaningful when ResourceHandle.synthetic = false."
+    },
+    "ResourceHandle": {
+      "type": "object",
+      "description": "Provenance record for a single identifier-bearing element. Captures what the translation wrote (raw), how it expressed the identifier (form), the best available resolved form (resolved), and whether the element was invented by the translation (synthetic). Used uniformly for node identities, edge labels, property keys, and property values.",
+      "required": ["raw", "form", "resolved", "synthetic"],
+      "additionalProperties": false,
+      "properties": {
+        "raw":       { "type": ["string", "null"], "description": "The exact string as it appeared in the translation output before any adapter resolution. E.g. 'ns1:Movie', '_:b0', 'Django Unchained'. Null when synthetic = true." },
+        "form":      { "oneOf": [{ "$ref": "#/$defs/ExpressionForm" }, { "type": "null" }], "description": "How the source-side identifier was expressed in the translation output. Null when synthetic = true." },
+        "resolved":  { "type": ["string", "null"], "description": "The best available resolved form produced by the adapter: full IRI if prefix was resolvable, otherwise the namespaced string, bare local name, or literal value as-is. Never null when synthetic = false. Null when synthetic = true." },
+        "synthetic": { "type": "boolean", "description": "True when this element was invented by the translation algorithm with no source RDF counterpart — e.g. the label 'Literal' on a GDM reified literal node, or the key 'object_value' on a KG2PG LitNode. When true, raw/form/resolved are all null and the element is excluded from provenance-based scoring." }
+      }
+    },
+    "PrefixMapping": {
+      "type": "object",
+      "required": ["prefix", "namespace"],
+      "additionalProperties": false,
+      "properties": {
+        "prefix":    { "type": "string", "description": "Short alias, e.g. 'ns1'." },
+        "namespace": { "type": "string", "format": "uri", "description": "Full namespace IRI, e.g. 'http://example.org/'." }
+      }
+    },
+    "LabelEntry": {
+      "type": "object",
+      "description": "A single label on a node or edge. Carries provenance via label_ref.",
+      "required": ["label", "label_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "label":     { "type": "string", "description": "Fully resolved canonical label string as produced by the adapter. Equals label_ref.resolved when synthetic = false; the raw label string when synthetic = true (no resolved form exists)." },
+        "label_ref": { "$ref": "#/$defs/ResourceHandle" }
+      }
+    },
+    "PropertyEntry": {
+      "type": "object",
+      "description": "A single property entry on a node or edge. Key and value each carry independent provenance via ResourceHandle.",
+      "required": ["key", "key_ref", "value_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "key":       { "type": "string", "description": "Fully resolved canonical property key string. Equals key_ref.resolved when synthetic = false; the raw key string when synthetic = true." },
+        "key_ref":   { "$ref": "#/$defs/ResourceHandle" },
+        "value_ref": { "$ref": "#/$defs/ResourceHandle" }
+      }
+    },
+    "Node": {
+      "type": "object",
+      "description": "A (resource / reified literal / blank) node in the property graph. A single 'id' field carries the node's file-scoped identifier. The form of that identifier is readable from node_ref: node_ref.form == full_iri / namespace_plus_local / local_only means id is an IRI-derived identifier; node_ref.form == literal means id is an adapter-constructed anchor for a value-bearing node whose actual value lives in node_ref.resolved; node_ref.synthetic == true means no source-side identifier was available (the node represents a real entity but the algorithm discarded its IRI, as in rdf2pg_sdm).",
+      "required": ["id", "node_ref", "labels", "properties"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "The node's identifier within this CPGM file, referenced by Relation.start and Relation.end. For resource nodes the adapter uses the resolved IRI. For blank nodes the source blank-node string (e.g. '_:b0'). For value-bearing nodes an adapter-constructed string (e.g. 'lit_kg2pg_42', 'lit_gdm_7'). For sdm nodes the prefixed numeric id (e.g. 'sdm_1'). Scoped to the current file."
+        },
+        "node_ref":   { "$ref": "#/$defs/ResourceHandle", "description": "Provenance of this node's identity. For resource nodes: resolved = full IRI or best available form, synthetic = false. For value-bearing nodes: form = literal, resolved = the literal value, synthetic = false. For sdm nodes where no identifier was preserved: synthetic = true." },
+        "labels":     { "type": "array", "items": { "$ref": "#/$defs/LabelEntry" } },
+        "properties": { "type": "array", "items": { "$ref": "#/$defs/PropertyEntry" } }
+      }
+    },
+    "Relation": {
+      "type": "object",
+      "description": "A directed edge. Carries no provenance at the relation level; the predicate IRI is on label_ref of each LabelEntry. Start and end reference Node.id.",
+      "required": ["start", "end", "labels", "properties"],
+      "additionalProperties": false,
+      "properties": {
+        "start":      { "type": "string" },
+        "end":        { "type": "string" },
+        "labels":     { "type": "array", "items": { "$ref": "#/$defs/LabelEntry" } },
+        "properties": { "type": "array", "items": { "$ref": "#/$defs/PropertyEntry" } }
+      }
+    }
+  }
+}

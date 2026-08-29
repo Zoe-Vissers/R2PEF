@@ -1,0 +1,16 @@
+source_rdf:
+  path: source.ttl
+cpgm:
+  file: cpgm_ip_t1.json
+evaluation:
+  metrics: [if, ip, ir]
+reporter:
+  output_dir: ../runs/smoke
+  run_name: smoke
+scorer:
+  if_: { threshold: 0.9 }
+  ip:  { threshold: 0.9 }
+  ir:  { threshold: 0.9 }
+  fairness:
+    mandatory_metrics: [if, ip]
+    optional_metrics:  [ir]

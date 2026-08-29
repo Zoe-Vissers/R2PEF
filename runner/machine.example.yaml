@@ -1,0 +1,107 @@
+# machine.example.yaml — per-machine configuration.
+#
+#   cp machine.example.yaml machine.yaml
+#   $EDITOR machine.yaml
+#
+# `machine.yaml` is gitignored; this template is not.
+#
+# ONLY the jar paths and java_home normally need editing. data_root, output_root
+# and the eval interpreter are pre-filled and work as-is inside this repository.
+#
+# ALWAYS run the driver from inside runner/:
+#     cd runner && python run_evaluation.py
+# Relative paths below are resolved against the current working directory.
+# All paths are expanded (~) and made absolute before being written into any
+# generated config — Java's Properties parser does not expand shell variables.
+
+# --- Java -----------------------------------------------------------------
+java:
+  java_home: ~/java/jdk-21.0.10        # null → use the system Java
+  xmx:       8g                        # default -Xmx for Java steps
+
+  # Heap should be sized to the WORKLOAD, not the machine.
+  xmx_per_step:
+    qse:         8g
+    kg2pg:       8g
+    rdf2pg_sdm:  4g
+    rdf2pg_gdm:  4g
+    rdf2pg_cdm:  4g
+
+  # Headroom (GB) added on top of -Xmx when computing the `prlimit --as` cap.
+  # The JVM needs address space beyond the heap for metaspace, thread stacks,
+  # code cache, and JIT. 2 GB is safe for most workloads.
+  xmx_overhead_gb: 2
+
+# --- Executables (BUILD THESE YOURSELF — see the top-level README) ---------
+rdf2pg:
+  jar:  ~/rdf2pg/dist/rdf2pg.jar
+  lib:  ~/rdf2pg/lib                   # must contain rdfs-processor.jar (CDM step 1)
+
+qse:
+  jar:            ~/qse/jar/qse.jar
+  resources_path: ~/qse/src/main/resources
+
+kg2pg:
+  jar:  ~/KG2PG/build/libs/kg2pg.jar
+
+# --- Evaluation framework --------------------------------------------------
+eval:
+  # Repository root: the directory that CONTAINS the r2pef/ package.
+  # Used as PYTHONPATH and as the working directory of the eval subprocess,
+  # mirroring the manual invocation:
+  #     cd <root> && PYTHONPATH=. python -m r2pef.pipeline <cfg>
+  root: ..
+
+  # Interpreter of whatever Python 3.12 environment (conda, venv, …).
+  # An ABSOLUTE path — not a bare `python`, the driver spawns subprocesses without
+  # an activated shell.
+  #   conda:  conda activate <env> && which python   → ~/miniforge3/envs/<env>/bin/python
+  #   venv:   <repo>/.venv/bin/python
+  python: ~/miniforge3/envs/r2pef/bin/python
+
+# --- Data ------------------------------------------------------------------
+# Relative to runner/ — resolves to <repo>/datasets.
+data_root: ../datasets
+
+# --- Output ----------------------------------------------------------------
+# Relative to runner/ — resolves to <repo>/reproducibility/runs.
+# The committed reference results in reproducibility/results/ are NOT touched.
+output_root: ../reproducibility/runs
+
+# --- Per-step timeouts (hours). SIGTERM, then SIGKILL. --------------------
+timeouts:
+  qse:         1
+  kg2pg:       1
+  rdf2pg_sdm:  1
+  rdf2pg_gdm:  1
+  rdf2pg_cdm:  1
+  eval:        4
+
+# --- Hard memory caps (GB), enforced via `prlimit --as` --------------------
+# A TOTAL virtual-memory ceiling, NOT a heap size. It must exceed the step's
+# -Xmx; any Java cap below (xmx + xmx_overhead_gb) is raised to that floor.
+# For the Python eval step (no -Xmx): 0 disables the cap entirely.
+#
+# Sizing: take "available" from `free -h`, x0.8 on an exclusive machine, x0.5
+# on a shared one. That is the ceiling for a single step.
+memory_caps_gb:
+  qse:         12      # heap 8g + headroom
+  kg2pg:       12
+  rdf2pg_sdm:  8
+  rdf2pg_gdm:  8
+  rdf2pg_cdm:  8
+  eval:        24      # raise for big datasets, or 0 to disable
+
+# --- Minimum free disk (GB) required before each phase ---------------------
+min_free_disk_gb: 20
+
+# --- Per-dataset overrides for the big jobs -------------------------------
+overrides:
+  bsbm_1m:
+    timeouts:       { qse: 1, kg2pg: 1, eval: 8 }
+    xmx:            { qse: 16g, kg2pg: 12g }
+    memory_caps_gb: { qse: 20, kg2pg: 16, eval: 24 }
+  watdiv_10m:
+    timeouts:       { qse: 1, kg2pg: 1, eval: 6 }
+    xmx:            { qse: 16g, kg2pg: 12g }
+    memory_caps_gb: { qse: 20, kg2pg: 16, eval: 24 }

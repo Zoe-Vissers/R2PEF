@@ -1,0 +1,150 @@
+{
+  "algorithm": "rdf2pg_sdm",
+  "prefixes": [
+    {
+      "prefix": "ex",
+      "namespace": "http://example.org/"
+    },
+    {
+      "prefix": "dc",
+      "namespace": "http://purl.org/dc/elements/1.1/"
+    },
+    {
+      "prefix": "rdf",
+      "namespace": "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "http://example.org/Movie1",
+      "node_ref": {
+        "raw": "http://example.org/Movie1",
+        "form": "full_iri",
+        "resolved": "http://example.org/Movie1",
+        "synthetic": false
+      },
+      "labels": [
+        {
+          "label": "Movie",
+          "label_ref": {
+            "raw": "http://example.org/Movie",
+            "form": "full_iri",
+            "resolved": "http://example.org/Movie",
+            "synthetic": false
+          }
+        }
+      ],
+      "properties": []
+    },
+    {
+      "id": "http://example.org/Oscar2013",
+      "node_ref": {
+        "raw": "http://example.org/Oscar2013",
+        "form": "full_iri",
+        "resolved": "http://example.org/Oscar2013",
+        "synthetic": false
+      },
+      "labels": [],
+      "properties": []
+    },
+    {
+      "id": "http://example.org/Tarantino",
+      "node_ref": {
+        "raw": "http://example.org/Tarantino",
+        "form": "full_iri",
+        "resolved": "http://example.org/Tarantino",
+        "synthetic": false
+      },
+      "labels": [],
+      "properties": []
+    },
+    {
+      "id": "lit:Django Unchained",
+      "node_ref": {
+        "raw": "\"Django Unchained\"",
+        "form": "literal",
+        "resolved": "\"Django Unchained\"",
+        "synthetic": false
+      },
+      "labels": [],
+      "properties": []
+    },
+    {
+      "id": "lit:Action",
+      "node_ref": {
+        "raw": "\"Action\"",
+        "form": "literal",
+        "resolved": "\"Action\"",
+        "synthetic": false
+      },
+      "labels": [],
+      "properties": []
+    }
+  ],
+  "relations": [
+    {
+      "start": "http://example.org/Movie1",
+      "end": "http://example.org/Tarantino",
+      "labels": [
+        {
+          "label": "director",
+          "label_ref": {
+            "raw": "http://example.org/director",
+            "form": "full_iri",
+            "resolved": "http://example.org/director",
+            "synthetic": false
+          }
+        }
+      ],
+      "properties": []
+    },
+    {
+      "start": "http://example.org/Oscar2013",
+      "end": "http://example.org/Tarantino",
+      "labels": [
+        {
+          "label": "awardedTo",
+          "label_ref": {
+            "raw": "http://example.org/awardedTo",
+            "form": "full_iri",
+            "resolved": "http://example.org/awardedTo",
+            "synthetic": false
+          }
+        }
+      ],
+      "properties": []
+    },
+    {
+      "start": "http://example.org/Movie1",
+      "end": "lit:Django Unchained",
+      "labels": [
+        {
+          "label": "title",
+          "label_ref": {
+            "raw": "http://example.org/title",
+            "form": "full_iri",
+            "resolved": "http://example.org/title",
+            "synthetic": false
+          }
+        }
+      ],
+      "properties": []
+    },
+    {
+      "start": "http://example.org/Movie1",
+      "end": "lit:Action",
+      "labels": [
+        {
+          "label": "dc:type",
+          "label_ref": {
+            "raw": "http://purl.org/dc/elements/1.1/type",
+            "form": "full_iri",
+            "resolved": "http://purl.org/dc/elements/1.1/type",
+            "synthetic": false
+          }
+        }
+      ],
+      "properties": []
+    }
+  ]
+}

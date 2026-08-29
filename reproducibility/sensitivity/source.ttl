@@ -1,0 +1,9 @@
+@prefix ex: <http://example.org/> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+ex:Movie1 ex:title "Django Unchained" .
+ex:Movie1 dc:type "Action" .
+ex:Movie1 ex:director ex:Tarantino .
+ex:Oscar2013 ex:awardedTo ex:Tarantino .
+ex:Movie1 rdf:type ex:Movie .

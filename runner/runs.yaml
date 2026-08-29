@@ -1,0 +1,51 @@
+# runs.yaml — execution plan.
+
+eval_repeats: 3
+
+pipelines:
+  - { name: sdm,           translation: rdf2pg_sdm, eval_adapter: sdm }
+  - { name: gdm,           translation: rdf2pg_gdm, eval_adapter: gdm }
+  - { name: cdm,           translation: rdf2pg_cdm, eval_adapter: cdm }
+  - { name: parsi,         translation: kg2pg,      kg2pg_parsimonious: true,
+      eval_adapter: kg2pg }
+  - { name: nonparsi,      translation: kg2pg,      kg2pg_parsimonious: false,
+      eval_adapter: kg2pg }
+
+
+# Mode A pipelines: skip translation, evaluate a pre-built CPGM.
+prebuilt_pipelines: 
+  # Example:
+   - name: sens_ip_t1
+     cpgm_file: ../reproducibility/sensitivity/cpgm_ip_t1.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_ip_t2
+     cpgm_file: ../reproducibility/sensitivity/cpgm_ip_t2.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_ip_t3
+     cpgm_file: ../reproducibility/sensitivity/cpgm_ip_t3.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_if_t1
+     cpgm_file: ../reproducibility/sensitivity/cpgm_if_t1.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_if_t2
+     cpgm_file: ../reproducibility/sensitivity/cpgm_if_t2.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_if_t3
+     cpgm_file: ../reproducibility/sensitivity/cpgm_if_t3.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_if_t4
+     cpgm_file: ../reproducibility/sensitivity/cpgm_if_t4.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_ir_t1
+     cpgm_file: ../reproducibility/sensitivity/cpgm_ir_t1.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+   - name: sens_ir_t2
+     cpgm_file: ../reproducibility/sensitivity/cpgm_ir_t2.json
+     source_rdf: ../reproducibility/sensitivity/source.ttl
+
+# Restrict the plan (empty = no restriction).
+only_datasets: []     # e.g. [watdiv_100k] 
+only_pipelines: []    # e.g. [parsi]
+
+# Skip specific (dataset, pipeline) combinations, e. g. watdiv_100k:parsi
+skip: []

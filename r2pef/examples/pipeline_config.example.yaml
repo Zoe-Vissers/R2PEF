@@ -1,0 +1,66 @@
+# Example pipeline configuration.
+
+source_rdf:
+  path: "../examples/source.ttl"
+
+evaluation:
+  metrics: ["if", "ip", "ir"]
+
+reporter:
+  # Base directory. The pipeline appends a run subdirectory inside it:
+  #   adapter mode → <algorithm>__<source-rdf-stem>/
+  #   file mode    → <cpgm-filename-stem>/
+  output_dir: "../examples/reports/"
+
+  # Override the subdirectory name. Leave as ``null`` to use the auto-derived
+  # name above; set to a string (in quotes) to pin a custom run name
+  run_name: null
+
+  visualize: true
+
+scorer:
+  if_:  { threshold: 0.9 }
+  ip:   { threshold: 0.9 }
+  ir:   { threshold: 0.9 }
+  fairness:
+    mandatory_metrics: ["if", "ip"]
+    optional_metrics:  ["ir"]
+
+# ── CPGM: pick ONE block ───────────────────────────────────────────────────
+# Mode A - load a pre-built CPGM (adapter already ran separately)
+cpgm:
+  file: "../examples/cpgms/cpgm_HHH.json"
+
+# Mode B - run an adapter on the fly.
+# The produced CPGM is saved automatically as <run-dir>/cpgm.json.
+
+# kg2pg  (directory of input files)
+#cpgm:
+#  kg2pg:
+#    input_dir: "/path/to/kg2pg/files"
+     # synthetic_labels and synthetic_keys: omit (or set to null) to use the
+     # adapter's built-in defaults; pass an empty list to disable synthetic
+     # classification entirely; pass an explicit list to override.
+#    # synthetic_labels: null
+#    # synthetic_keys:   null
+
+# rdf2pg_sdm  (single .ypg instance file)
+#cpgm:
+#  rdf2pg_sdm:
+#    instance: "/path/to/instance.ypg"
+#    # synthetic_labels: null
+#    # synthetic_keys:   null
+
+# rdf2pg_gdm  (single .ypg instance file)
+#cpgm:
+#  rdf2pg_gdm:
+#    instance: "/path/to/instance.ypg"
+#    # synthetic_labels: null
+#    # synthetic_keys:   null
+
+# rdf2pg_cdm  (single .ypg instance file)
+#cpgm:
+#  rdf2pg_cdm:
+#    instance: "/path/to/instance.ypg"
+#    # synthetic_labels: null
+#    # synthetic_keys:   null

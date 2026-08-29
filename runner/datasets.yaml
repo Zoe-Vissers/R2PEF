@@ -1,0 +1,20 @@
+# datasets.yaml — dataset catalogue.
+#
+# Paths are relative to `data_root` in machine.yaml (<repo>/datasets).
+
+datasets:
+  - name: watdiv_100k
+    path_rel: watdiv/watdiv_100k.nt
+    expected_classes: 12          
+    expected_lines:   103000      
+
+  - name: bsbm_100k
+    path_rel: bsbm/bsbm_100k.nt
+    expected_classes: 8
+    expected_lines:   100000
+
+  - name: dbpedia_geo_200k
+    path_rel: dbpedia/dbpedia_geo_200k.nt
+    expected_classes: 30
+    expected_lines:   200000
+    

@@ -1,0 +1,32 @@
+# CPGM block snippets keyed by adapter. Inserted into eval_pipeline.yaml.tmpl
+# under the top-level `cpgm:` key. The runner adds the 2-space indent in code
+# (yaml.safe_load strips block-scalar indentation, so the indent here is 0).
+#
+# Each placeholder in braces is substituted by runners.py.
+
+file: |
+  file: "{cpgm_file}"
+
+sdm: |
+  rdf2pg_sdm:
+    instance: "{instance}"
+    synthetic_labels: []
+    synthetic_keys:   null
+
+gdm: |
+  rdf2pg_gdm:
+    instance: "{instance}"
+    synthetic_labels: ["Literal", "Resource", "BlankNode", "DatatypeProperty", "ObjectProperty"]
+    synthetic_keys:   ["type", "value", "iri", "id"]
+
+cdm: |
+  rdf2pg_cdm:
+    instance: "{instance}"
+    synthetic_labels: []
+    synthetic_keys:   null
+
+kg2pg: |
+  kg2pg:
+    input_dir: "{input_dir}"
+    synthetic_labels: ["Node", "LitNode", "IRI", "Prefixes", "KG2PG"]
+    synthetic_keys:   ["object_value", "type", "object_type"]
