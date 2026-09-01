@@ -1,7 +1,7 @@
 # Example pipeline configuration.
 
 source_rdf:
-  path: "../examples/source.ttl"
+  path: "../path/to/source.ttl"
 
 evaluation:
   metrics: ["if", "ip", "ir"]
@@ -28,8 +28,8 @@ scorer:
 
 # ── CPGM: pick ONE block ───────────────────────────────────────────────────
 # Mode A - load a pre-built CPGM (adapter already ran separately)
-cpgm:
-  file: "../examples/cpgms/cpgm_HHH.json"
+#cpgm:
+#  file: "../path/to/cpgm.json"
 
 # Mode B - run an adapter on the fly.
 # The produced CPGM is saved automatically as <run-dir>/cpgm.json.
