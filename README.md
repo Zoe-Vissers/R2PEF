@@ -1,7 +1,11 @@
 # R2PEF: RDF-PG Evaluation Framework incl. Orchestrator
 
+Unless otherwise stated, the source code in this repository is licensed under the MIT License.
+The MIT License does not apply to third-party data or other third-party material contained in this repository.
+For details, see [THIRD_PARTY_LICENSES](THIRD_PARTY_LICENSES.md).
+
 This repository contains two separable components, one shared Conda environment,
-the raw datasets used in all experiments, and the original results.
+the raw datasets used in the experiments, and the original results.
 
 | # | Component | Directory | What it is |
 |---|-----------|-----------|------------|
