@@ -1,5 +1,5 @@
 """
-adapter_kg2pg.py — CPGM adapter for the KG2PG_PARSI algorithm.
+adapter_kg2pg.py — CPGM adapter for the KG2PG algorithm.
 
 Input files (all in input_dir):
   PG_PREFIX_MAP.csv       — NAMESPACE,PREFIX rows
