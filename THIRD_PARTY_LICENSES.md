@@ -302,3 +302,53 @@ The following files are based on third-party configuration templates:
 
 - `runner/templates/qse.properties.tmpl` — based on 'Quality Shapes Extraction (QSE)' (MIT License)
 - `runner/templates/kg2pg.properties.tmpl` — based on 'KG2PG: Knowledge Graph to Property Graph Transformation' (MIT License)
+
+## Third-Party Data
+
+WatDiv 
+------
+The dataset datasets/watdiv/watdiv_100k.nt was generated using the WatDiv benchmark generator (version 0.6). It is generated test data and is not original user/contributor data. See the WatDiv project for the generator and benchmark information.
+
+G. Aluç, O. Hartig, M. T. Özsu and K. Daudjee. Diversified Stress Testing of RDF Data Management Systems. In Proc. The Semantic Web - ISWC 2014 - 13th International Semantic Web Conference, 2014, pages 197-212. WatDiv available from http://dsg.uwaterloo.ca/watdiv/.
+
+
+BSBM
+------
+The dataset datasets/bsbm/bsbm_100k.nt was generated using the BSBM benchmark generator (version 0.2). It is generated test data and is not original user/contributor data. See the BSBM project for the generator and benchmark information.
+
+Bizer, C., & Schultz, A. (2011). The berlin sparql benchmark. In Semantic Services, Interoperability and Web Applications: Emerging Concepts (pp. 81-103). IGI Global Scientific Publishing.
+
+DBPedia 
+------
+
+The dataset datasets/dbpedia/dbpedia_geo_200k.nt was created from selected triples originating from three DBpedia datasets from the **2022.12.01** release. The three source datasets were obtained from the [DBpedia Databus](https://databus.dbpedia.org):
+- DBpedia Instance Types
+  - **License:** CC BY 3.0 (http://purl.oclc.org/NET/rdflicense/cc-by3.0)
+  - **Version:** 2022.12.01
+  - **Source:** https://databus.dbpedia.org/dbpedia/mappings/instance-types/2022.12.01/instance-types_inference=specific_lang=en.ttl.bz2
+- DBpedia Mapping-based Literals
+  - **License:** CC BY 3.0 (http://purl.oclc.org/NET/rdflicense/cc-by3.0)
+  - **Version:** 2022.12.01
+  - **Source:** https://databus.dbpedia.org/dbpedia/mappings/mappingbased-literals/2022.12.01/mappingbased-literals_lang=en.ttl.bz2
+- DBpedia Mapping-based Objects
+  - **License:** CC BY 3.0 (http://purl.oclc.org/NET/rdflicense/cc-by3.0)
+  - **Version:** 2022.12.01
+  - **Source:** https://databus.dbpedia.org/dbpedia/mappings/mappingbased-objects/2022.12.01/mappingbased-objects_lang=en.ttl.bz2
+
+The resulting dataset is **not a complete copy of the original DBpedia datasets**. 
+It was created by applying a seed-and-expand procedure to select and combine relevant triples from the source datasets. 
+The selected RDF triples were not intentionally modified, rewritten, or altered. The extraction process only determined which existing DBpedia triples were included in the resulting dataset.
+The processing performed for this dataset consists of:
+- selecting seed resources;
+- expanding the selected resources according to the extraction procedure;
+- selecting relevant existing RDF triples;
+- combining triples originating from the three DBpedia source datasets.
+The resulting dataset is therefore a smaller, purpose-specific selection of the original DBpedia data.
+Accordingly, the dataset contained in this repository should be understood as a **selected and recombined subset of DBpedia data**.
+The original data is attributed to **DBpedia**. This repository does not claim ownership of the original DBpedia data.
+
+### Attribution
+DBpedia data, version `2022.12.01`.
+Source: [DBpedia Databus](https://databus.dbpedia.org/)
+Licensed under [Creative Commons Attribution 3.0 Unported (CC BY 3.0)](https://creativecommons.org/licenses/by/3.0/).
+The data in this repository has been selected and recombined from the original DBpedia distributions using a seed-and-expand extraction procedure.
