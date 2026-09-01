@@ -70,18 +70,18 @@ workflow.
  
 #### QSE - Quality Shapes Extraction
 - Repository: https://github.com/dkw-aau/qse
-- Licence: MIT
+- Licence (as of 09/01/2026): MIT
 - Reference:
   > Rabbani, Kashif, Matteo Lissandrini, and Katja Hose. "Extraction of validating shapes from very large knowledge graphs." Proceedings of the VLDB Endowment 16.5 (2023): 1023-1032.
 #### KG2PG - Knowledge Graph to Property Graph
 - Repository: https://github.com/dkw-aau/KG2PG
 - Companion artifact (S3PG): https://github.com/dkw-aau/s3pg
-- License: MIT
+- License (as of 09/01/2026): MIT
 - Reference (S3PG, ACM SIGMOD 2025):
   > Rabbani, Kashif, et al. "Transforming RDF graphs to property graphs using standardized schemas." Proceedings of the ACM on Management of Data 2.6 (2024): 1-25.
 #### rdf2pg
 - Repository: https://github.com/renzoar/rdf2pg
-- License: Apache 2.0
+- License (as of 09/01/2026): Apache 2.0
 - Reference: 
   > Angles, Renzo, Harsh Thakkar, and Dominik Tomaszuk. "Mapping RDF databases to property graph databases." IEEE Access 8 (2020): 86091-86110.
 
