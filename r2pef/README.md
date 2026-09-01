@@ -93,15 +93,6 @@ The role classifier reads the source RDF and assigns elements **NR** (Node Role)
 
 Generates common ground for computation of all scores.
 
-```text
-build_context(cpgm, source_rdf_path, role):
-    1. T := parse_rdf(source_rdf_path)                  
-    2. R := build_provenance_registry(cpgm)             
-    3. R_inv := build_reverse_registry(R)              
-    4. (pgius, derive_C, triple_index) := build_pgius(cpgm, R)
-    5. return EvaluationContext(T, role, R, R_inv, pgius, derive_C, ...)
-```
-
 ### 5. Score
 
 The three scorers are independent. They run in any order over the same
@@ -192,5 +183,12 @@ cpgm:
 
 Relative paths in the config are resolved against the config file's own
 directory.
+Default synthetic_labels and synthetic_keys are:
+| Pipeline | synthetic_labels | synthetic_keys |
+|---|---|---|
+| kg2pg | "Node", "LitNode", "IRI", "Prefixes", "KG2PG" | "object_value", "object_type", "type" |
+| rdf2pg_sdm | | |
+| rdf2pg_gdm | "Resource", "Literal", "BlankNode", "DatatypeProperty", "ObjectProperty" | "iri", "value", "type", "id" |
+| rdf2pg_cdm | |
 
 ---
